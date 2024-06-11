@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "dbWbekM8R+E=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Fig\\source\\repos\\FigueroaCrafts\\FigueroaCrafts.Website\\FigueroaCrafts.WebSite.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Fig\\.nuget\\packages\\bootstrap\\5.3.3\\bootstrap.5.3.3.nupkg.sha512",
+    "C:\\Users\\Fig\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.20.1\\microsoft.visualstudio.azure.containers.tools.targets.1.20.1.nupkg.sha512"
+  ],
+  "logs": []
+}
