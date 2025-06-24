@@ -1,25 +1,22 @@
 #See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8081
-ENV ASPNETCORE_URLS=http://+:8080
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["FigueroaCrafts.WebSite.csproj", "."]
-RUN dotnet restore "./FigueroaCrafts.WebSite.csproj"
+COPY ["FigueroaCrafts.WebSite/FigueroaCrafts.WebSite.csproj", "FigueroaCrafts.WebSite/"]
+RUN dotnet restore "FigueroaCrafts.WebSite/FigueroaCrafts.WebSite.csproj"
 COPY . .
-WORKDIR "/src/."
-RUN dotnet build "./FigueroaCrafts.WebSite.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/FigueroaCrafts.WebSite"
+RUN dotnet build "FigueroaCrafts.WebSite.csproj" -c Release -o /app/build
 
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./FigueroaCrafts.WebSite.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "FigueroaCrafts.WebSite.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ENV ASPNETCORE_URLS=http://+:8080
 ENTRYPOINT ["dotnet", "FigueroaCrafts.WebSite.dll"]
