@@ -1,20 +1,21 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
+# Base image with runtime
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 8080
 
+# Build stage
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["FigueroaCrafts.WebSite/FigueroaCrafts.WebSite.csproj", "FigueroaCrafts.WebSite/"]
-RUN dotnet restore "FigueroaCrafts.WebSite/FigueroaCrafts.WebSite.csproj"
+COPY ["FigueroaCrafts.WebSite.csproj", "./"]
+RUN dotnet restore "./FigueroaCrafts.WebSite.csproj"
 COPY . .
-WORKDIR "/src/FigueroaCrafts.WebSite"
 RUN dotnet build "FigueroaCrafts.WebSite.csproj" -c Release -o /app/build
 
+# Publish stage
 FROM build AS publish
 RUN dotnet publish "FigueroaCrafts.WebSite.csproj" -c Release -o /app/publish
 
+# Final runtime image
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
